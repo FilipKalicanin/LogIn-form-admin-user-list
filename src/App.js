@@ -17,15 +17,20 @@ class App extends React.Component {
   }
 
   updateUsersList() {
-
     getUsersList().then(res => {
+  
       if (JSON.parse(localStorage.getItem('loggedUser'))) {
 
-        const loggedUser = JSON.parse(localStorage.getItem('loggedUser'));
+        const findUser = JSON.parse(localStorage.getItem('loggedUser'));
 
-        if (loggedUser && loggedUser.length === 1) {
-          localStorage.setItem('loggedUser', JSON.stringify(loggedUser[0]));
-        }
+        let loggedUser;
+
+        res.forEach(user => {
+          if(user.id === findUser) {
+            loggedUser = user;
+            return loggedUser
+          }
+        })
 
         this.setState({
           loggedUser: loggedUser,
@@ -37,7 +42,7 @@ class App extends React.Component {
           usersList: res
         })
       }
-    });
+    })
 
   }
 
@@ -59,7 +64,6 @@ class App extends React.Component {
   }
 
   render() {
-    console.log("<App />", this.state.usersList)
     return (
       <div className="root">
         {this.state.loggedUser ?

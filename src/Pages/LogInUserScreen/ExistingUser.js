@@ -1,6 +1,6 @@
 import React from 'react';
-import { UserIcon } from '../Icons/IconUser';
-import { PasswordIcon } from '../Icons/IconPassword';
+import { UserIcon } from '../../Icons/IconUser';
+import { PasswordIcon } from '../../Icons/IconPassword';
 
 class ExistingUser extends React.Component {
     constructor(props) {

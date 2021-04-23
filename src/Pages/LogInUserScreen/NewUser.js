@@ -1,6 +1,7 @@
 import React from 'react';
-import { UserIcon } from '../Icons/IconUser'
-import { PasswordIcon } from '../Icons/IconPassword'
+import { UserIcon } from '../../Icons/IconUser';
+import { PasswordIcon } from '../../Icons/IconPassword';
+import { postRequest } from '../../Components/fetchData';
 
 class NewUser extends React.Component {
     constructor(props) {
@@ -33,18 +34,9 @@ class NewUser extends React.Component {
     }
 
     addUserToUsersList() {
-        fetch('http://localhost:3001/users', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(this.state.newUser)
-        })
-            .then(res => res.json())
-            .then(res => { return res })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
+       postRequest(this.state.newUser).then(res => {
+           this.props.updateUsersList();
+       });
     }
 
     addUser() {
@@ -70,9 +62,9 @@ class NewUser extends React.Component {
             })
         } else {
             this.addUserToUsersList();
-            this.props.updateUsersList();
             localStorage.clear();
-            localStorage.setItem('loggedUser', JSON.stringify(this.state.newUser));
+            localStorage.setItem('loggedUser', JSON.stringify(this.state.newUser.id));
+            this.props.logIn(this.state.newUser);
         }
     }
 

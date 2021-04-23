@@ -1,57 +1,5 @@
 import React from 'react';
-import { Back } from '../Icons/IconBack';
-
-//EDIT INFO WIHLE LOGGED IN AS ADMIN - PAGE//
-
-export class NewInfoAdmin extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            user: null
-        }
-
-        this.handleChange = this.handleChange.bind(this);
-        this.saveData = this.saveData.bind(this);
-    }
-
-    handleChange(event) {
-        let newUserData = { ...this.props.selectedUser };
-        newUserData.role = event.target.value;
-        this.setState({
-            user: newUserData
-        })
-    }
-
-    saveData() {
-        this.props.changeDataPutRequest(this.state.user.id, { ...this.state.user });
-        this.props.updateUsersList();
-        this.props.changePageStateToList();
-    }
-
-    render() {
-        console.log(this.state.user)
-        return (
-            <>
-                <div className="button-back-wrapper-new-user">
-                    <button onClick={this.props.changePageStateToList} className="button-back"><Back /></button>
-                </div>
-                <div className="edit-user-admin-wrapper">
-                    <h3 className="edit-user-heading">Edit users role:</h3>
-                    <div className="edit-user-admin-input-wrapper">
-                        <select onChange={this.handleChange}>
-                            <option value=''></option>
-                            <option value="user">User</option>
-                            <option value="admin">Admin</option>
-                        </select>
-                        <button onClick={this.saveData} className="edit-button-admin-confirm">Confirm</button>
-                    </div>
-                </div>
-            </>
-        )
-    }
-}
-
-//EDIT INFO WHILE LOGGED IN AS A USER - PAGE//
+import { Back } from '../../Icons/IconBack';
 
 export class NewInfoUser extends React.Component {
     constructor(props) {
@@ -89,14 +37,11 @@ export class NewInfoUser extends React.Component {
             alert('User with wanted username already exist.')
         } else {
             this.props.changeDataPutRequest(this.props.selectedUser.id, { ...this.props.selectedUser, username: this.state.username, password: this.state.password });
-            this.props.updateUsersList();
             this.props.changePageStateToList();
         }
-
     }
 
     render() {
-        console.log(this.state)
         return (
             <>
                 <div className="button-back-wrapper-new-user">

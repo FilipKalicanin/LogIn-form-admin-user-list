@@ -1,7 +1,7 @@
 import React from 'react';
 import Home from './Home';
-import NewUser from './NewUser';
-import ExistingUser from './ExistingUser';
+import NewUser from '../Pages/LogInUserScreen/NewUser';
+import ExistingUser from '../Pages/LogInUserScreen/ExistingUser';
 
 const pageState = {
     EXISTING_USER: 'existing',
@@ -41,7 +41,7 @@ class LoginForm extends React.Component {
         // If credentials do match, proceed into <Home /> with that user and set him as logged in localStorage
         if (filteredUser && filteredUser.length === 1) {
             this.props.logIn(filteredUser[0]);
-            localStorage.setItem('loggedUser', JSON.stringify(filteredUser[0]));
+            localStorage.setItem('loggedUser', JSON.stringify(filteredUser[0].id));
         } else {
             alert('Wrong username or password');
             this.setState({
@@ -100,6 +100,7 @@ class LoginForm extends React.Component {
                 <NewUser
                     usersList={this.props.usersList}
                     updateUsersList={this.props.updateUsersList}
+                    logIn={this.props.logIn}
                     backToLogIn={this.changePageStateToExsistingUser}
                 />
             )

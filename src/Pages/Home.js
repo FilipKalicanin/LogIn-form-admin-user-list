@@ -1,7 +1,8 @@
 import User from '../Components/User';
 import React from 'react';
 import LoginForm from './LogIn';
-import { NewInfoAdmin, NewInfoUser } from './EditUserPage';
+import { NewInfoAdmin } from '../Pages/EditInfoPages/EditInfoAdmin';
+import { NewInfoUser } from '../Pages/EditInfoPages/EditInfoUser';
 import { deleteRequest, putRequest } from '../Components/fetchData';
 
 const pageState = {
@@ -52,7 +53,9 @@ class Home extends React.Component {
     }
 
     changeDataPutRequest(id, newData) {
-        putRequest(id, newData)
+        putRequest(id, newData).then(() => {
+            this.props.updateUsersList()
+        });
     }
 
     deleteUser(id) {
@@ -117,6 +120,7 @@ class Home extends React.Component {
             return (
                 <NewInfoAdmin
                     selectedUser={this.state.selectedUser}
+                    loggedUser={this.props.loggedUser}
                     changeDataPutRequest={this.changeDataPutRequest}
                     changePageStateToList={this.changePageStateToList}
                     updateUsersList={this.props.updateUsersList}

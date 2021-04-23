@@ -13,7 +13,7 @@ export function getUsersList() {
 }
 
 export function putRequest(id, newData) {
-    fetch(`http://localhost:3001/users/${id}`, {
+    let newUser = fetch(`http://localhost:3001/users/${id}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json'
@@ -23,13 +23,30 @@ export function putRequest(id, newData) {
         if (!res.ok) {
             throw new Error(`${res.status}`);
         } else {
+
             return res
         }
-    })
-        .then(res => res.json())
+    }).then(res => res.json())
         .catch((error) => {
             console.error('Error:', error);
         });
+    return newUser;
+}
+
+export function postRequest(user) {
+    let newUser = fetch('http://localhost:3001/users', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(user)
+    })
+        .then(res => res.json())
+        .then(res => { return res })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+        return newUser
 }
 
 export function deleteRequest(id) {
@@ -40,8 +57,7 @@ export function deleteRequest(id) {
         }
     }).then(() => {
         console.log(`User with ID:${id} deleted successfully`)
-    })
-        .catch((error) => {
-            console.log(error)
-        });
+    }).catch((error) => {
+        console.log(error)
+    });
 }
