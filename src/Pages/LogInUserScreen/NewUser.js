@@ -34,8 +34,10 @@ class NewUser extends React.Component {
     }
 
     addUserToUsersList() {
-       postRequest(this.state.newUser).then(res => {
+       postRequest(this.state.newUser).then((res) => {
            this.props.updateUsersList();
+           this.props.logIn(this.state.newUser);
+           localStorage.setItem('loggedUser', JSON.stringify(res.id));
        });
     }
 
@@ -62,9 +64,6 @@ class NewUser extends React.Component {
             })
         } else {
             this.addUserToUsersList();
-            localStorage.clear();
-            localStorage.setItem('loggedUser', JSON.stringify(this.state.newUser.id));
-            this.props.logIn(this.state.newUser);
         }
     }
 

@@ -50,7 +50,7 @@ export function postRequest(user) {
 }
 
 export function deleteRequest(id) {
-    fetch(`http://localhost:3001/users/${id}`, {
+    let deleted = fetch(`http://localhost:3001/users/${id}`, {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json'
@@ -60,4 +60,5 @@ export function deleteRequest(id) {
     }).catch((error) => {
         console.log(error)
     });
+    return deleted;
 }

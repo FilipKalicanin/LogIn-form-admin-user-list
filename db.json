@@ -1,10 +1,10 @@
 {
   "users": [
     {
-      "username": "Filip",
+      "username": "Filip ",
       "password": "111",
       "role": "admin",
-      "id": "1"
+      "id": "admin"
     },
     {
       "username": "Marko",
@@ -13,10 +13,10 @@
       "id": "a6jm1V_"
     },
     {
-      "username": "Bogi",
+      "username": "Proba250",
       "password": "123",
       "role": "user",
-      "id": "2QIrz4u"
+      "id": "lzUvLvK"
     }
   ]
 }

@@ -59,13 +59,18 @@ class Home extends React.Component {
     }
 
     deleteUser(id) {
-        deleteRequest(id)
-        this.props.logOut()
+        deleteRequest(id).then(() => {
+            this.props.updateUsersList();
+            if(this.props.loggedUser.id === id) {
+                this.props.logOut()
+            }
+        })
     }
 
     userIsAdmin() {
         let allUsers = this.props.usersList.map(oneUser => {
             return <User
+                loggedUser={this.props.loggedUser}
                 user={oneUser}
                 changePageStateToEdit={this.changePageStateToEdit}
                 setSelectedUser={this.setSelectedUser}
@@ -93,6 +98,7 @@ class Home extends React.Component {
                 </div>
                 <div className="users-wrapper">
                     <User
+                        loggedUser={this.props.loggedUser}
                         user={this.props.loggedUser}
                         changePageStateToEdit={this.changePageStateToEdit}
                         setSelectedUser={this.setSelectedUser}
@@ -123,6 +129,7 @@ class Home extends React.Component {
                     loggedUser={this.props.loggedUser}
                     changeDataPutRequest={this.changeDataPutRequest}
                     changePageStateToList={this.changePageStateToList}
+                    usersList={this.props.usersList}
                     updateUsersList={this.props.updateUsersList}
                 />
             )

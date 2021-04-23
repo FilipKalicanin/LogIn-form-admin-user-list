@@ -21,6 +21,8 @@ export class NewInfoAdmin extends React.Component {
         this.saveDataAsUser = this.saveDataAsUser.bind(this);
     }
 
+    // save data for users Role
+
     handleChange(event) {
         let newUserData = { ...this.props.selectedUser };
         newUserData.role = event.target.value;
@@ -28,6 +30,13 @@ export class NewInfoAdmin extends React.Component {
             user: newUserData
         })
     }
+
+    saveData() {
+        this.props.changeDataPutRequest(this.state.user.id, { ...this.state.user });
+        this.props.changePageStateToList();
+    }
+
+    // save data for user Info
 
     collectUsername(event) {
         this.setState({
@@ -41,11 +50,6 @@ export class NewInfoAdmin extends React.Component {
         })
     }
 
-    saveData() {
-        this.props.changeDataPutRequest(this.state.user.id, { ...this.state.user });
-        this.props.changePageStateToList();
-    }
-
     saveDataAsUser() {
         let checkUp = this.props.usersList.filter(user => {
             if (this.state.username === user.username) {
@@ -56,7 +60,7 @@ export class NewInfoAdmin extends React.Component {
         if (checkUp && checkUp.length > 0) {
             alert('User with wanted username already exist.')
         } else {
-            this.props.changeDataPutRequest(this.props.selectedUser.id, { ...this.props.selectedUser, username: this.state.username, password: this.state.password });
+            this.props.changeDataPutRequest(this.props.loggedUser.id, { ...this.props.loggedUser, username: this.state.username, password: this.state.password });
             this.props.changePageStateToList();
         }
     }
