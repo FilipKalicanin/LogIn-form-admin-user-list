@@ -1,9 +1,8 @@
 import User from '../Components/User';
 import React from 'react';
-import LoginForm from './LogIn';
-import { NewInfoAdmin } from '../Pages/EditInfoPages/EditInfoAdmin';
-import { NewInfoUser } from '../Pages/EditInfoPages/EditInfoUser';
+import { NewInfoPage } from '../Pages/EditInfoPage';
 import { deleteRequest, putRequest } from '../Components/fetchData';
+import { ErrorPage } from './ErrorPage';
 
 const pageState = {
     LIST: 'list',
@@ -16,7 +15,8 @@ class Home extends React.Component {
         this.state = {
             pageState: pageState.LIST,
             selectedUser: null,
-            usersList: null
+            usersList: null,
+            error: false
         }
 
         this.userIsAdmin = this.userIsAdmin.bind(this);
@@ -26,12 +26,6 @@ class Home extends React.Component {
         this.setSelectedUser = this.setSelectedUser.bind(this);
         this.deleteUser = this.deleteUser.bind(this);
         this.changeDataPutRequest = this.changeDataPutRequest.bind(this);
-    }
-
-    componentDidMount() {
-        this.setState({
-            usersList: this.props.usersList
-        })
     }
 
     changePageStateToEdit() {
@@ -54,16 +48,24 @@ class Home extends React.Component {
 
     changeDataPutRequest(id, newData) {
         putRequest(id, newData).then(() => {
-            this.props.updateUsersList()
-        });
+            this.props.updateUsersList();
+        }).catch(() => {
+            this.setState({
+                error: true
+            });
+        })
     }
 
     deleteUser(id) {
         deleteRequest(id).then(() => {
             this.props.updateUsersList();
-            if(this.props.loggedUser.id === id) {
-                this.props.logOut()
+            if (this.props.loggedUser.id === id) {
+                this.props.logOut();
             }
+        }).catch(() => {
+            this.setState({
+                error: true
+            });
         })
     }
 
@@ -112,36 +114,25 @@ class Home extends React.Component {
     }
 
     render() {
-        if (this.state.pageState === 'list') {
-            if (!this.props.loggedUser) {
-                return <LoginForm />
-            } else {
-                return (
-                    this.props.loggedUser.role === 'admin' ? this.userIsAdmin() : this.userIsNotAdmin()
-                )
-            }
-        }
-
-        if (this.state.pageState === 'edit' && this.props.loggedUser.role === 'admin') {
+        if(this.state.error === true) {
             return (
-                <NewInfoAdmin
-                    selectedUser={this.state.selectedUser}
-                    loggedUser={this.props.loggedUser}
-                    changeDataPutRequest={this.changeDataPutRequest}
-                    changePageStateToList={this.changePageStateToList}
-                    usersList={this.props.usersList}
-                    updateUsersList={this.props.updateUsersList}
-                />
+                <ErrorPage />
             )
         }
-        if (this.state.pageState === 'edit' && this.props.loggedUser.role === 'user') {
+        if (this.state.pageState === 'list') {
             return (
-                <NewInfoUser
-                    selectedUser={this.props.loggedUser}
+                this.props.loggedUser.role === 'admin' ? this.userIsAdmin() : this.userIsNotAdmin()
+            )
+        }
+        if (this.state.pageState === 'edit') {
+            return (
+                <NewInfoPage
+                    selectedUser={this.state.selectedUser}
+                    loggedUser={this.props.loggedUser}
                     usersList={this.props.usersList}
+                    updateUsersList={this.props.updateUsersList}
                     changeDataPutRequest={this.changeDataPutRequest}
                     changePageStateToList={this.changePageStateToList}
-                    updateUsersList={this.props.updateUsersList}
                 />
             )
         }

@@ -1,38 +1,59 @@
 import React from 'react';
-import Home from './Home';
-import NewUser from '../Pages/LogInUserScreen/NewUser';
-import ExistingUser from '../Pages/LogInUserScreen/ExistingUser';
+import { UserIcon } from '../Icons/IconUser';
+import { PasswordIcon } from '../Icons/IconPassword';
+import { postRequest } from '../Components/fetchData';
+import { ErrorPage } from './ErrorPage';
 
 const pageState = {
-    EXISTING_USER: 'existing',
-    NEW_USER: 'new'
+    EXISTING_USER: 'existingUser',
+    NEW_USER: 'newUser'
 }
 
 class LoginForm extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            username: '',
-            password: '',
-            pageState: pageState.EXISTING_USER
+            newUser: {
+                username: '',
+                password: '',
+                role: 'user',
+                id: ''
+            },
+            pageState: pageState.EXISTING_USER,
+            error: false
         }
 
         this.loginCheck = this.loginCheck.bind(this);
         this.handleChangeUserName = this.handleChangeUserName.bind(this);
         this.handleChangePassword = this.handleChangePassword.bind(this);
-        this.changePageStateToNewUser = this.changePageStateToNewUser.bind(this);
-        this.changePageStateToExsistingUser = this.changePageStateToExsistingUser.bind(this);
+        this.changeFormToNew = this.changeFormToNew.bind(this);
+        this.changeFormToExistng = this.changeFormToExistng.bind(this);
+        this.addUser = this.addUser.bind(this);
+    }
+
+    // METHODS FOR EXISTING USER
+
+    handleChangeUserName(event) {
+        this.setState({
+            newUser: { ...this.state.newUser, username: event.target.value }
+        })
+    }
+
+    handleChangePassword(event) {
+        this.setState({
+            newUser: { ...this.state.newUser, password: event.target.value }
+        })
     }
 
     loginCheck() {
 
-        if(this.state.username === '' || this.state.password === '') {
+        if (this.state.newUser.username === '' || this.state.newUser.password === '') {
             alert('Input fields cannot be empty')
         }
 
         // does input credential match credentials from any user in usersList from <App />
         let filteredUser = this.props.usersList.filter(user => {
-            if (user.username === this.state.username && user.password === this.state.password) {
+            if (user.username === this.state.newUser.username && user.password === this.state.newUser.password) {
                 return true;
             }
             return false;
@@ -45,64 +66,106 @@ class LoginForm extends React.Component {
         } else {
             alert('Wrong username or password');
             this.setState({
-                username: '',
-                password: '',
-                pageState: pageState.EXISTING_USER
+                newUser: {
+                    username: '',
+                    password: '',
+                    role: 'user',
+                    id: ''
+                }
             })
         }
     }
 
-    // collect input data from input to state
-    handleChangeUserName(event) {
-        this.setState({
-            username: event.target.value
+    // METHODS FOR NEW USER
+
+    addUserToUsersList() {
+        postRequest(this.state.newUser).then((res) => {
+            this.props.updateUsersList();
+            this.props.logIn(this.state.newUser);
+            localStorage.setItem('loggedUser', JSON.stringify(res.id));
+        }).catch(() => {
+            this.setState({
+                error: true
+            })
         })
     }
 
-    // collect input data from input to state
-    handleChangePassword(event) {
-        this.setState({
-            password: event.target.value
+    addUser() {
+
+        if (this.state.newUser.username === '' || this.state.newUser.password === '') {
+            alert('Input fields cannot be empty');
+        }
+
+        let checkUp = this.props.usersList.filter(user => {
+            if (this.state.newUser.username === user.username) {
+                return true;
+            }
+            return false;
         })
+
+        if (checkUp && checkUp.length > 0) {
+            alert('User with this username alredy exist');
+            this.setState({
+                newUser: {
+                    username: '',
+                    password: '',
+                    role: 'user',
+                    id: ''
+                }
+            })
+        } else {
+            this.addUserToUsersList();
+        }
     }
 
-    changePageStateToNewUser() {
+    changeFormToNew() {
         this.setState({
             pageState: pageState.NEW_USER
         })
     }
 
-    changePageStateToExsistingUser() {
+    changeFormToExistng() {
         this.setState({
             pageState: pageState.EXISTING_USER
         })
     }
 
     render() {
-        // if user is already logged in (exists in localStorage) proceed to <Home />
-        if (this.props.loggedUser) {
-            return <Home />;
-        }
-        if (this.state.pageState === pageState.EXISTING_USER) {
+        if (this.state.error === true) {
             return (
-                <ExistingUser
-                    username={this.state.username}
-                    password={this.state.password}
-                    handleChangeUserName={this.handleChangeUserName}
-                    handleChangePassword={this.handleChangePassword}
-                    logInCheck={this.loginCheck}
-                    changePageStateToNewUser={this.changePageStateToNewUser}
-                />
+                <ErrorPage />
             )
-        }
-        if (this.state.pageState === pageState.NEW_USER) {
+        } else {
             return (
-                <NewUser
-                    usersList={this.props.usersList}
-                    updateUsersList={this.props.updateUsersList}
-                    logIn={this.props.logIn}
-                    backToLogIn={this.changePageStateToExsistingUser}
-                />
+                <div className="login-form-container">
+                    <div className="login-form-input-container">
+                        <label className="login-form-header">{this.state.pageState === pageState.EXISTING_USER ? 'Log-in' : 'Create Account'}</label>
+                    </div>
+
+                    <div className="login-form-input-container">
+                        <label className="login-form-input-label"><UserIcon /></label>
+                        <input type="text" className="login-form-input-input" value={this.state.newUser.username} onChange={this.handleChangeUserName} />
+                    </div>
+
+                    <div className="login-form-input-container">
+                        <label className="login-form-input-label"><PasswordIcon /></label>
+                        <input type="password" className="login-form-input-input" value={this.state.newUser.password} onChange={this.handleChangePassword} />
+                    </div>
+
+                    <button className="login-form-button" onClick={this.state.pageState === pageState.EXISTING_USER ? this.loginCheck : this.addUser}>
+                        {this.state.pageState === pageState.EXISTING_USER ? 'Log-In' : 'Create'}
+                    </button>
+
+                    {this.state.pageState === pageState.EXISTING_USER ?
+                        <div className="create-user-wrapper">
+                            <label className='not-a-member'>Not a member?</label>
+                            <button onClick={this.changeFormToNew} className='create-user-button'>Create account</button>
+                        </div> :
+                        <div className="create-user-wrapper">
+                            <button onClick={this.changeFormToExistng} className='create-user-button'>Back to Log-In</button>
+                        </div>
+                    }
+                </div>
             )
         }
     }

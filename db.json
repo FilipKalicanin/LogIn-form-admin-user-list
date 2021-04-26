@@ -1,7 +1,7 @@
 {
   "users": [
     {
-      "username": "Filip ",
+      "username": "Filip",
       "password": "111",
       "role": "admin",
       "id": "admin"
@@ -13,10 +13,16 @@
       "id": "a6jm1V_"
     },
     {
-      "username": "Proba250",
-      "password": "123",
+      "username": "Disco",
+      "password": "Champagne",
       "role": "user",
-      "id": "lzUvLvK"
+      "id": "X2w6gRN"
+    },
+    {
+      "username": "Champagne",
+      "password": "disco",
+      "role": "user",
+      "id": "jkfkop7"
     }
   ]
 }

@@ -430,3 +430,25 @@ body {
   fill:#b2aad1;
 }
 
+
+.error-page-wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 30rem;
+  height: 30rem;
+  background-color: #b2aad1;
+  justify-content: space-evenly;
+}
+
+.error-page-heading {
+  font-size: 5rem;
+  font-weight: 600;
+  color: #584b8d;
+}
+
+.error-page-text {
+  font-size: 3rem;
+  font-weight: 600;
+  color: #584b8d;
+}
+

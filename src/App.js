@@ -2,13 +2,15 @@ import React from 'react';
 import Home from './Pages/Home';
 import LoginForm from './Pages/LogIn';
 import { getUsersList } from './Components/fetchData';
+import { ErrorPage } from './Pages/ErrorPage';
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       loggedUser: null,
-      usersList: null
+      usersList: null,
+      error: false
     }
 
     this.logIn = this.logIn.bind(this);
@@ -18,7 +20,7 @@ class App extends React.Component {
 
   updateUsersList() {
     getUsersList().then(res => {
-  
+
       if (JSON.parse(localStorage.getItem('loggedUser'))) {
 
         const findUser = JSON.parse(localStorage.getItem('loggedUser'));
@@ -26,7 +28,7 @@ class App extends React.Component {
         let loggedUser;
 
         res.forEach(user => {
-          if(user.id === findUser) {
+          if (user.id === findUser) {
             loggedUser = user;
             return loggedUser
           }
@@ -43,6 +45,11 @@ class App extends React.Component {
         })
       }
     })
+      .catch(() => {
+        this.setState({
+          error: true
+        })
+      })
   }
 
   componentDidMount() {
@@ -63,24 +70,28 @@ class App extends React.Component {
   }
 
   render() {
-    return (
-      <div className="root">
-        {this.state.loggedUser ?
-          <Home
-            logOut={this.logOut}
-            usersList={this.state.usersList}
-            loggedUser={this.state.loggedUser}
-            updateUsersList={this.updateUsersList}
-          /> :
-          <LoginForm
-            logIn={this.logIn}
-            logOut={this.logOut}
-            usersList={this.state.usersList}
-            loggedUser={this.state.loggedUser}
-            updateUsersList={this.updateUsersList}
-          />}
-      </div>
-    )
+    if (this.state.error === true) {
+      return <ErrorPage />
+    } else {
+      return (
+        <div className="root">
+          {this.state.loggedUser ?
+            <Home
+              logOut={this.logOut}
+              usersList={this.state.usersList}
+              loggedUser={this.state.loggedUser}
+              updateUsersList={this.updateUsersList}
+            /> :
+            <LoginForm
+              logIn={this.logIn}
+              logOut={this.logOut}
+              usersList={this.state.usersList}
+              loggedUser={this.state.loggedUser}
+              updateUsersList={this.updateUsersList}
+            />}
+        </div>
+      )
+    }
   }
 }
 

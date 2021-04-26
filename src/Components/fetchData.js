@@ -23,13 +23,11 @@ export function putRequest(id, newData) {
         if (!res.ok) {
             throw new Error(`${res.status}`);
         } else {
-
             return res
         }
-    }).then(res => res.json())
-        .catch((error) => {
-            console.error('Error:', error);
-        });
+    }).then(res => {
+        return res.json()
+    })
     return newUser;
 }
 
@@ -41,12 +39,16 @@ export function postRequest(user) {
         },
         body: JSON.stringify(user)
     })
-        .then(res => res.json())
-        .then(res => { return res })
-        .catch((error) => {
-            console.error('Error:', error);
-        });
-        return newUser
+        .then((res) => {
+            if (!res.ok) {
+                throw new Error(`${res.status}`);
+            } else {
+                return res.json()
+            }
+        }).then(res => {
+            return res
+        })
+    return newUser
 }
 
 export function deleteRequest(id) {
@@ -55,10 +57,10 @@ export function deleteRequest(id) {
         headers: {
             'Content-Type': 'application/json'
         }
-    }).then(() => {
-        console.log(`User with ID:${id} deleted successfully`)
-    }).catch((error) => {
-        console.log(error)
+    }).then((res) => {
+        if(!res.ok) {
+            throw new Error(`${res.status}`);
+        }
     });
     return deleted;
 }
