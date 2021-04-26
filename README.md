@@ -5,7 +5,9 @@ Steps to run the app:
 - in bash#2 npm start
 
 After log-in, user is stored in localStorage so it will remain stored after page refresh.
-Also, users list is collected from simple JSON server for wich i have created fetch methods (Get, Post, Put and Delete)
+Also, users list is collected from simple JSON server for wich i have created fetch methods (Get, Post, Put and Delete).
+While logged in as user, you can change your own data or delete profile.
+In meantime, user logged in as Admin, can change his own personal data, and is able of changing other users role.
 
 ![LogInScreen](https://user-images.githubusercontent.com/66743918/116098856-af8ffe00-a6ab-11eb-992e-c569c0b5b39a.png)
 

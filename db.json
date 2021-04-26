@@ -7,22 +7,22 @@
       "id": "admin"
     },
     {
-      "username": "Marko",
-      "password": "111",
-      "role": "admin",
-      "id": "a6jm1V_"
+      "username": "Mike",
+      "password": "123",
+      "role": "user",
+      "id": "Rq4B-U9"
     },
     {
-      "username": "Disco",
-      "password": "Champagne",
+      "username": "Josh",
+      "password": "223",
       "role": "user",
-      "id": "X2w6gRN"
+      "id": "1sAdEcf"
     },
     {
-      "username": "Champagne",
-      "password": "disco",
+      "username": "Sarah",
+      "password": "eqweeqweq",
       "role": "user",
-      "id": "jkfkop7"
+      "id": "EK0BVnT"
     }
   ]
 }
